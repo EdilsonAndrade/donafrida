@@ -1,0 +1,256 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--fundo);
+  border-bottom: 1px solid var(--contorno);
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+/*
+ * Transparente sobre o banner hero da home. O sinal `data-hero-topo` é posto
+ * pela primeira seção da home; `:has()` evita levantar estado só para isso, e
+ * um navegador sem suporte simplesmente mostra o cabeçalho sólido, que é o
+ * comportamento correto em todas as outras páginas.
+ */
+:global(body:has([data-hero-topo])) .header {
+  position: fixed;
+  inset-inline: 0;
+  background: transparent;
+  border-bottom-color: transparent;
+  color: var(--acao-texto);
+}
+
+:global(body:has([data-hero-topo])) .header .logo {
+  color: var(--acao-texto);
+}
+
+/* Assim que a página sai do topo, o cabeçalho volta a ser sólido. */
+:global(html[data-rolado] body:has([data-hero-topo])) .header {
+  background: var(--fundo);
+  border-bottom-color: var(--contorno);
+  color: var(--tinta);
+}
+
+:global(html[data-rolado] body:has([data-hero-topo])) .header .logo {
+  color: var(--tinta);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: var(--altura-header);
+}
+
+.brand {
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+.adminLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.adminLinks a {
+  text-decoration: none;
+  color: var(--tinta-suave);
+}
+
+.navBotao,
+.menuBotao {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  color: inherit;
+  text-align: start;
+}
+
+.navBotao {
+  color: var(--tinta-suave);
+}
+
+@media (max-width: 900px) {
+  .adminLinks {
+    display: none;
+  }
+}
+
+/* ---- Menu do celular ---- */
+
+.hamburguer {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburguerLinhas {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 20px;
+}
+
+.hamburguerLinhas span {
+  display: block;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.hamburguerLinhas[data-aberto="true"] span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.hamburguerLinhas[data-aberto="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburguerLinhas[data-aberto="true"] span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+.menuVeu {
+  position: fixed;
+  inset: 0;
+  background: rgb(43 38 38 / 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 70;
+}
+
+.menuVeu[data-aberto="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menuPainel {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: min(320px, 85vw);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: var(--superficie);
+  color: var(--tinta);
+  border-inline-start: 1px solid var(--contorno);
+  transform: translateX(100%);
+  transition: transform 220ms ease;
+  overflow-y: auto;
+  z-index: 80;
+}
+
+.menuPainel[data-aberto="true"] {
+  transform: translateX(0);
+}
+
+.menuTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuTitulo {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+.menuFechar {
+  border: 0;
+  background: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+  padding: 0 0.25rem;
+}
+
+.menuBusca {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.menuBusca input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--contorno);
+  border-radius: var(--raio);
+  background: var(--superficie);
+}
+
+.menuBusca button {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--contorno-forte);
+  border-radius: var(--raio);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
+.menuLinks,
+.menuAdmin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.menuLinks a,
+.menuAdmin a {
+  text-decoration: none;
+}
+
+.menuAdmin {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--contorno);
+  font-size: 0.875rem;
+  color: var(--tinta-suave);
+}
+
+@media (max-width: 900px) {
+  .hamburguer {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 901px) {
+  .menuVeu,
+  .menuPainel {
+    display: none;
+  }
+}

@@ -1,0 +1,278 @@
+/* Palco do pôster da marca: fundo rosa da casa, contorno nude. */
+.palco {
+  --palco-fundo: var(--fundo-rosa);
+  --palco-borda: var(--contorno-forte);
+}
+
+/* ---------- Página /encomendas ---------- */
+
+.pagina {
+  padding-bottom: 4.5rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+  padding-top: 1rem;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  min-width: 0;
+}
+
+/* Assinatura da página: o pôster vira um adesivo colado no palco. */
+.palcoPoster {
+  background: var(--palco-fundo);
+  border-radius: var(--raio);
+  padding: 1.6rem;
+  display: flex;
+  justify-content: center;
+}
+
+.poster {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  border-radius: var(--raio);
+  border: 3px solid var(--palco-borda);
+  box-shadow: 8px 8px 0 var(--destaque);
+  transform: rotate(-2deg);
+}
+
+.passos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.passo {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--tinta-suave);
+}
+
+.passoIcone {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--raio-redondo);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--acao-texto);
+  background: var(--acao);
+}
+
+.passo strong {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--tinta);
+}
+
+/* ---------- Formulário ---------- */
+
+.cartao {
+  background: var(--superficie);
+  border: 1px solid var(--contorno);
+  border-radius: var(--raio);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cartaoTitulo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--sucesso);
+  margin: 0;
+}
+
+.textarea {
+  min-height: 9rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.contador {
+  align-self: flex-end;
+}
+
+/* Campo-armadilha anti-robô: fora da tela, inacessível a teclado e leitores. */
+.armadilha {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.whatsapp {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--tinta-suave);
+}
+
+.whatsapp a {
+  color: var(--acao);
+  font-weight: 600;
+}
+
+.sucesso {
+  text-align: center;
+  align-items: center;
+  padding: 2.5rem 1.75rem;
+}
+
+.sucessoBadge {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  background: var(--aviso);
+  color: var(--tinta);
+  border-radius: var(--raio-redondo);
+  padding: 0.4rem 0.95rem;
+}
+
+.sucessoTitulo {
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  line-height: 1.15;
+}
+
+.sucessoTexto {
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--tinta-suave);
+  margin: 0;
+  max-width: 40ch;
+}
+
+.sucessoLink {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--acao);
+}
+
+/* ---------- Faixa na vitrine (/produtos) ---------- */
+
+.faixa {
+  margin: 0.5rem 0 4rem;
+  background: var(--palco-fundo);
+  border: 3px solid var(--palco-borda);
+  border-radius: var(--raio);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 2.25rem;
+  overflow: hidden;
+}
+
+.faixaTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+
+.faixaEyebrow {
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  color: var(--destaque);
+  margin: 0;
+}
+
+.faixaTitulo {
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  line-height: 1.12;
+  color: var(--acao-texto);
+  max-width: 20ch;
+}
+
+.faixaTitulo span {
+  color: var(--aviso);
+}
+
+.faixaDescricao {
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--tinta-suave);
+  margin: 0;
+  max-width: 46ch;
+}
+
+.faixaBotao {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--acao-texto);
+  text-decoration: none;
+  background: var(--acao);
+  border-radius: var(--raio-redondo);
+  padding: 0.85rem 1.6rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.faixaBotao:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra);
+}
+
+.faixaMiniatura {
+  display: block;
+  width: 190px;
+  height: auto;
+  border-radius: var(--raio);
+  border: 3px solid var(--palco-borda);
+  box-shadow: 6px 6px 0 var(--destaque);
+  transform: rotate(3deg);
+}
+
+@media (max-width: 720px) {
+  .faixa {
+    grid-template-columns: 1fr;
+    padding: 1.6rem 1.4rem;
+  }
+
+  .faixaMiniatura {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faixaBotao {
+    transition: none;
+  }
+  .faixaBotao:hover {
+    transform: none;
+  }
+}

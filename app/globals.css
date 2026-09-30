@@ -1,0 +1,134 @@
+/*
+ * Tokens da Dona Frida (EDI-116).
+ * Paleta da marca: #F4E8E8 rosa suave, #FFFFFF branco, #D8C6C4 nude,
+ * #B8A6A4 nude escuro, #767070 cinza — estendida com os neutros de texto e de
+ * estado exigidos por contraste AA (ver specs/002-identidade-visual-loja/research.md §4).
+ * Tema único: claro.
+ */
+:root {
+  color-scheme: light;
+
+  /* Superfícies */
+  --fundo: #ffffff;
+  --fundo-rosa: #f4e8e8;
+  --superficie: #ffffff;
+
+  /* Linhas — nunca use como cor de texto (2.3:1 sobre branco) */
+  --contorno: #d8c6c4;
+  --contorno-forte: #b8a6a4;
+
+  /* Texto */
+  --tinta: #2b2626;
+  --tinta-suave: #767070;
+
+  /* Ações */
+  --acao: #2b2626;
+  --acao-texto: #ffffff;
+  --destaque: #b8a6a4;
+
+  /* Estados */
+  --sucesso: #4f6b4f;
+  --aviso: #8a6d3b;
+  --erro: #a8443c;
+
+  /* Tipografia — Bodoni Moda só acima de 24px */
+  --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
+  --font-body: "Jost", -apple-system, "Segoe UI", sans-serif;
+
+  /* Forma */
+  --raio: 2px;
+  --raio-redondo: 999px;
+  --sombra: 0 1px 2px rgb(43 38 38 / 0.06);
+  --container: 1180px;
+
+  /* Altura do cabeçalho fixo, usada por âncoras e pelo topo das páginas */
+  --altura-header: 68px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Impede que o cabeçalho fixo cubra o alvo de uma âncora */
+  scroll-padding-top: calc(var(--altura-header) + 1rem);
+}
+
+body {
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.625rem, 3.5vw, 2.25rem);
+  line-height: 1.15;
+}
+
+/* h3 costuma cair abaixo de 24px, onde a Bodoni perde legibilidade */
+h3 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.125rem;
+  letter-spacing: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acao);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 1.75rem;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

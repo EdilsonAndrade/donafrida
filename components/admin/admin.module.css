@@ -1,0 +1,920 @@
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--contorno);
+}
+
+.bar h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--raio-redondo);
+  padding: 0.65rem 1.3rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btnPrimary {
+  composes: btn;
+  background: var(--acao);
+  color: var(--acao-texto);
+}
+
+.btnGhost {
+  composes: btn;
+  background: transparent;
+  border-color: var(--contorno);
+  color: var(--tinta);
+}
+
+.btnDanger {
+  composes: btn;
+  background: transparent;
+  border-color: var(--contorno);
+  color: var(--erro);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.table th {
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tinta-suave);
+  font-weight: 600;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 2px solid var(--contorno);
+}
+
+.table td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid var(--contorno);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.badge {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  border-radius: var(--raio-redondo);
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--contorno);
+}
+
+.badgeZero {
+  composes: badge;
+  color: var(--tinta-suave);
+}
+
+/* Aviso "aguardando liberação para postagem" (EDI-105) — informativo, não é status nem erro. */
+.badgeAguardandoLiberacao {
+  composes: badge;
+  color: var(--tinta-suave);
+  border-style: dashed;
+  white-space: nowrap;
+}
+
+/* Selos de sincronização com o anúncio do Mercado Livre (ao lado dos rótulos do formulário de produto). */
+.seloSync {
+  composes: badge;
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  vertical-align: middle;
+  cursor: help;
+}
+
+.seloSyncAuto {
+  composes: seloSync;
+  color: var(--sucesso);
+  border-color: var(--sucesso);
+}
+
+.seloSyncAtributos {
+  composes: seloSync;
+  color: var(--aviso);
+  border-color: var(--aviso);
+}
+
+.seloSyncRepublicar {
+  composes: seloSync;
+  color: var(--erro);
+  border-color: var(--erro);
+}
+
+.seloSyncInterno {
+  composes: seloSync;
+  color: var(--tinta-suave);
+}
+
+.badgeStatusPendente {
+  composes: badge;
+  color: var(--aviso);
+  border-color: var(--aviso);
+}
+
+.badgeStatusPago {
+  composes: badge;
+  color: var(--sucesso);
+  border-color: var(--sucesso);
+}
+
+.badgeStatusEmProducao {
+  composes: badge;
+  color: var(--acao);
+  border-color: var(--acao);
+}
+
+.badgeStatusEnviado {
+  composes: badge;
+  color: var(--acao);
+  border-color: var(--acao);
+}
+
+.badgeStatusEntregue {
+  composes: badge;
+  color: var(--sucesso);
+  border-color: var(--sucesso);
+}
+
+.badgeStatusCancelado {
+  composes: badge;
+  color: var(--erro);
+  border-color: var(--erro);
+}
+
+.badgeCanalSite {
+  composes: badge;
+}
+
+.badgeCanalMercadoLivre {
+  composes: badge;
+  color: var(--acao);
+  border-color: var(--acao);
+}
+
+/* Azul da Meta: o selo precisa ser reconhecível de relance ao lado do Mercado Livre. */
+.badgeCanalFacebook {
+  composes: badge;
+  color: #1877f2;
+  border-color: #1877f2;
+}
+
+.badgeCanalShopeeEmBreve {
+  composes: badge;
+  color: var(--tinta-suave);
+  border-style: dashed;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.filtros {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.filtroSelect {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  border: 1px solid var(--contorno);
+  background: var(--superficie);
+  color: var(--tinta);
+  border-radius: var(--raio-redondo);
+  padding: 0.45rem 0.9rem;
+}
+
+.avisoShopee {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  color: var(--tinta-suave);
+  border: 2px dashed var(--contorno);
+  border-radius: var(--raio);
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  color: var(--tinta-suave);
+  border: 2px dashed var(--contorno);
+  border-radius: var(--raio);
+}
+
+.form {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--tinta-suave);
+}
+
+.field input,
+.field textarea {
+  border: 1px solid var(--contorno);
+  background: var(--superficie);
+  border-radius: var(--raio);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--tinta);
+}
+
+.field select {
+  border: 1px solid var(--contorno);
+  background: var(--superficie);
+  border-radius: var(--raio);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--tinta);
+}
+
+.field select:focus {
+  border-color: var(--acao);
+  outline: none;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--acao);
+  outline: none;
+}
+
+.field textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.fieldError {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--erro);
+}
+
+.charCounter {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  color: var(--tinta-suave);
+  align-self: flex-end;
+}
+
+.charCounterExcedido {
+  composes: charCounter;
+  color: var(--erro);
+  font-weight: 600;
+}
+
+.fieldWarning {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--aviso);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.fotos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.foto {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: var(--raio);
+  overflow: hidden;
+  border: 1px solid var(--contorno);
+  cursor: grab;
+}
+
+.foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fotoRemover {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: var(--superficie);
+  border: 1px solid var(--contorno);
+  border-radius: var(--raio-redondo);
+  font-size: 0.65rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 3px 6px;
+}
+
+.fotoArrastando {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.fotoSobreAlvo {
+  outline: 2px solid var(--acao);
+  outline-offset: 2px;
+}
+
+.fotoOrdem {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: var(--raio-redondo);
+  background: rgb(43 38 38 / 0.55);
+  color: var(--acao-texto);
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.fotoMover {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  padding: 2px 3px;
+  background: rgb(255 255 255 / 0.85);
+}
+
+.fotoMoverBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 0.7rem;
+  padding: 1px 3px;
+  color: var(--tinta);
+}
+
+.fotoMoverBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.fotoMlIncluida,
+.fotoMlExcluida {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.58rem;
+  border-radius: var(--raio-redondo);
+  padding: 1px 5px;
+  line-height: 1.4;
+}
+
+.fotoMlIncluida {
+  color: var(--tinta-suave);
+}
+
+.fotoMlExcluida {
+  background: var(--aviso);
+  color: var(--acao-texto);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.formError {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--erro);
+}
+
+.mlLinkBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.3rem;
+}
+
+.mlLink {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--acao);
+}
+
+.mlLinkAviso {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  color: var(--tinta-suave);
+}
+
+.channelCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  border: 1px solid var(--contorno);
+  border-radius: var(--raio);
+  padding: 1rem 1.1rem;
+  background: var(--superficie);
+}
+
+.channelCard + .channelCard {
+  margin-top: 0.9rem;
+}
+
+.channelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.channelName {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--tinta);
+}
+
+.channelToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.channelToggle input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--acao);
+}
+
+.channelActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.catSelect {
+  position: relative;
+}
+
+.catControles {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.catGatilho {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--contorno);
+  border-radius: var(--raio);
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+}
+
+.catGatilho:hover,
+.catGatilho[aria-expanded="true"] {
+  border-color: var(--acao);
+}
+
+.catEscolhida {
+  font-weight: 600;
+}
+
+.catAutomatica {
+  color: var(--tinta-suave);
+}
+
+.catPainel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.7rem;
+  background: var(--superficie);
+  border: 2px solid var(--acao);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.catBusca {
+  border: 1px solid var(--contorno);
+  background: var(--superficie);
+  border-radius: var(--raio);
+  padding: 0.55rem 0.8rem;
+  font-size: 0.92rem;
+  color: var(--tinta);
+}
+
+.catBusca:focus {
+  border-color: var(--acao);
+  outline: none;
+}
+
+.catTrilha {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--tinta-suave);
+}
+
+.catTrilhaBotao {
+  font: inherit;
+  font-weight: 600;
+  color: var(--acao);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.catLista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.catItem {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--tinta);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+}
+
+.catItem:hover,
+.catItem:focus-visible,
+.catItem[aria-selected="true"] {
+  background: var(--contorno);
+  outline: none;
+}
+
+.catVazio {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--tinta-suave);
+  padding: 0.3rem 0.6rem;
+}
+
+.formSuccess {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--sucesso);
+}
+
+.loginPagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: var(--fundo);
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 380px;
+  background: var(--superficie);
+  border: 1px solid var(--contorno);
+  border-radius: var(--raio);
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.2rem;
+}
+
+.loginMarca {
+  margin-bottom: 0.5rem;
+}
+
+.loginSaudacao {
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  color: var(--tinta-suave);
+  margin: 0;
+}
+
+.loginTitulo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.loginPagina .form {
+  width: 100%;
+  text-align: left;
+}
+
+.loginPagina .actions {
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.loginPagina .btnPrimary {
+  width: 100%;
+  text-align: center;
+}
+
+.topoAdmin {
+  background: var(--superficie);
+  border-bottom: 2px solid var(--contorno);
+}
+
+.topoAdminConteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.75rem;
+}
+
+.topoAdminMarca {
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  color: var(--acao);
+}
+
+.topoAdminNav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  margin-right: auto;
+  margin-left: 1.75rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.topoAdminNav a {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.topoAdminNav a:hover {
+  color: var(--acao);
+}
+
+.topoAdminUsuario {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+/* Atendimento (EDI-98) — perguntas/reclamações/mensagens pendentes do Mercado Livre */
+
+.secaoAtendimento {
+  margin-bottom: 2.25rem;
+}
+
+.secaoAtendimentoTitulo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.secaoAtendimentoTitulo h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.secaoAtendimentoContagem {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: var(--acao);
+}
+
+.listaAtendimento {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cardAtendimento {
+  border: 1px solid var(--contorno);
+  border-radius: var(--raio);
+  padding: 1rem 1.15rem;
+  background: var(--superficie);
+}
+
+.cardAtendimentoTopo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.cardAtendimentoTexto {
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.cardAtendimentoReferencia {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+  margin-top: 0.25rem;
+}
+
+.cardAtendimentoAcoes {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cardAtendimentoResposta {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--contorno);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardAtendimentoRespostaAcoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Comparativo de preço por canal (EDI-106) */
+.comparativoCanais {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.comparativoCanal,
+.comparativoCanalAviso,
+.comparativoCanalPrejuizo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+  border: 1px solid var(--contorno);
+  background: var(--superficie);
+  border-radius: var(--raio);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.comparativoCanalAviso {
+  border-color: var(--aviso);
+}
+
+.comparativoCanalPrejuizo {
+  border-color: var(--erro);
+}
+
+.comparativoPreco {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--acao);
+}
+
+/*
+ * Painel no celular: a barra do admin quebra em duas linhas (marca + usuário
+ * em cima, links em "pílulas" com rolagem lateral embaixo) e as tabelas rolam
+ * dentro do próprio espaço — antes as duas alargavam a página inteira, o que
+ * reduzia o zoom e deslocava o menu hambúrguer do cabeçalho do site.
+ */
+@media (max-width: 768px) {
+  .topoAdminConteudo {
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    padding: 0.7rem 1rem 0.6rem;
+  }
+
+  .topoAdminNav {
+    order: 3;
+    flex: 1 1 100%;
+    flex-wrap: nowrap;
+    margin: 0 -1rem;
+    padding: 0.15rem 1rem 0.35rem;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+
+  .topoAdminNav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topoAdminNav a {
+    border: 1px solid var(--contorno);
+    border-radius: var(--raio-redondo);
+    padding: 0.3rem 0.8rem;
+    background: var(--fundo);
+  }
+
+  .topoAdminUsuario {
+    margin-left: auto;
+  }
+
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .bar {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

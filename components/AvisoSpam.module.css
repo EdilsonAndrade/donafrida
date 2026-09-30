@@ -1,0 +1,33 @@
+/* Cores fixas (iguais nos dois temas): o amarelo de alerta precisa ser sempre bem visível. */
+.aviso {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  text-align: left;
+  background: var(--fundo-rosa);
+  border: 2px solid var(--aviso);
+  border-radius: var(--raio);
+  padding: 1rem 1.15rem;
+  color: var(--tinta);
+}
+
+.icone {
+  flex-shrink: 0;
+  color: var(--aviso);
+  margin-top: 0.1rem;
+}
+
+.titulo {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  margin: 0 0 0.3rem;
+}
+
+.texto {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}

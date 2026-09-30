@@ -1,0 +1,58 @@
+import { NextResponse } from "next/server";
+import { criarProduto, listarProdutos, slugDisponivel } from "@/lib/produtos/repository";
+import { gerarSlug } from "@/lib/produtos/slug";
+import { validarProduto, type ProdutoPayload } from "@/lib/produtos/validation";
+import type {
+  CustoProduto,
+  EmbalagemEnvio,
+  FichaTecnicaProduto,
+  IntegracoesCanal,
+  MetaCatalogoProduto,
+  PrecosCanaisProduto,
+  TaxasCanaisProduto,
+} from "@/lib/models/produto";
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const q = searchParams.get("q") ?? undefined;
+  const categoria = searchParams.get("categoria") ?? undefined;
+
+  const produtos = await listarProdutos({ q, categoria });
+  return NextResponse.json({ produtos });
+}
+
+export async function POST(request: Request) {
+  const payload = (await request.json()) as ProdutoPayload;
+  const erros = validarProduto(payload);
+
+  if (Object.keys(erros).length > 0) {
+    return NextResponse.json({ erro: "Payload inválido.", campos: erros }, { status: 400 });
+  }
+
+  const nome = payload.nome as string;
+  const categoria = payload.categoria as string;
+  let slug = gerarSlug(nome);
+
+  if (!(await slugDisponivel(categoria, slug))) {
+    slug = `${slug}-${Date.now().toString(36)}`;
+  }
+
+  const produto = await criarProduto({
+    nome,
+    slug,
+    descricao: payload.descricao as string,
+    preco: payload.preco as number,
+    estoque: payload.estoque as number,
+    categoria,
+    fotos: payload.fotos as string[],
+    integracoes: payload.integracoes as IntegracoesCanal | undefined,
+    custoProduto: payload.custoProduto as CustoProduto | undefined,
+    taxasCanais: payload.taxasCanais as TaxasCanaisProduto | undefined,
+    precosCanais: payload.precosCanais as PrecosCanaisProduto | undefined,
+    embalagemEnvio: payload.embalagemEnvio as EmbalagemEnvio | undefined,
+    fichaTecnica: payload.fichaTecnica as FichaTecnicaProduto | undefined,
+    metaCatalogo: payload.metaCatalogo as MetaCatalogoProduto | undefined,
+  });
+
+  return NextResponse.json({ produto }, { status: 201 });
+}
