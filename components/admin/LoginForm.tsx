@@ -36,11 +36,13 @@ export default function LoginForm({ callbackUrl }: { callbackUrl: string }) {
   return (
     <div className={styles.loginCard}>
       <div className={styles.loginMarca} aria-hidden="true">
-        <svg viewBox="0 0 60 60" width="40" height="40">
-          <path d="M30 6 L52 18 L52 42 L30 54 L8 42 L8 18 Z" fill="none" />
-          <path d="M30 6 L52 18 L30 30 L8 18 Z" fill="var(--roxo)" />
-          <path d="M8 18 L30 30 L30 54 L8 42 Z" fill="var(--roxo)" opacity="0.75" />
-          <path d="M52 18 L52 42 L30 54 L30 30 Z" fill="var(--roxo)" opacity="0.55" />
+        {/* Fio de contas da marca, o mesmo elemento que separa as seções da loja. */}
+        <svg viewBox="0 0 60 16" width="60" height="16">
+          <circle cx="6" cy="8" r="3" fill="var(--contorno-forte)" opacity="0.5" />
+          <circle cx="18" cy="8" r="4" fill="var(--contorno-forte)" opacity="0.75" />
+          <circle cx="30" cy="8" r="5" fill="var(--contorno-forte)" />
+          <circle cx="42" cy="8" r="4" fill="var(--contorno-forte)" opacity="0.75" />
+          <circle cx="54" cy="8" r="3" fill="var(--contorno-forte)" opacity="0.5" />
         </svg>
       </div>
       <p className={styles.loginSaudacao}>bem-vinda(o) de volta</p>

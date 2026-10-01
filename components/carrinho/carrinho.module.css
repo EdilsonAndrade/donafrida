@@ -393,10 +393,6 @@
 /* ---- Painel lateral do carrinho (EDI-116) ---- */
 
 .drawer {
-  margin: 0 0 0 auto;
-  inline-size: min(420px, 100vw);
-  block-size: 100dvh;
-  max-block-size: 100dvh;
   padding: 0;
   border: 0;
   border-inline-start: 1px solid var(--contorno);
@@ -404,6 +400,22 @@
   color: var(--tinta);
   display: flex;
   flex-direction: column;
+}
+
+/*
+ * O navegador estiliza o diálogo aberto por `dialog:modal`, que tem
+ * especificidade maior que uma classe sozinha: ele impõe `margin: auto` e um
+ * `max-height` reduzido, e o painel nascia centralizado em vez de colado à
+ * direita. Repetir a pseudo-classe aqui ganha essa disputa.
+ */
+.drawer:modal {
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  inline-size: min(420px, 100vw);
+  max-inline-size: 100vw;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
 }
 
 .drawer[open] {
@@ -414,7 +426,7 @@
  * ::backdrop não herda as variáveis do :root de forma confiável entre motores —
  * é a única cor literal autorizada do projeto (research.md §7).
  */
-.drawer::backdrop {
+.drawer:modal::backdrop {
   background: rgb(43 38 38 / 0.4);
 }
 
