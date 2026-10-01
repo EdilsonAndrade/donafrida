@@ -314,10 +314,16 @@
   max-width: 52ch;
   margin-bottom: 1.5rem;
   font-size: 1.02rem;
+  /*
+   * A descrição é texto puro digitado no painel, com quebras de linha e listas
+   * feitas à mão. `pre-line` preserva essas quebras e ainda assim deixa o
+   * parágrafo se ajustar à largura — sem ele o texto vira um bloco corrido.
+   */
+  white-space: pre-line;
 }
 
 .datasheet {
-  border: 2px dashed var(--contorno);
+  border: 1px solid var(--contorno);
   border-radius: var(--raio);
   padding: 1.2rem 1.4rem;
   margin-bottom: 1.6rem;
