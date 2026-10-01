@@ -408,9 +408,11 @@
  * `max-height` reduzido, e o painel nascia centralizado em vez de colado à
  * direita. Repetir a pseudo-classe aqui ganha essa disputa.
  */
+.drawer[open],
 .drawer:modal {
   position: fixed;
   inset: 0 0 0 auto;
+  z-index: 90;
   margin: 0;
   inline-size: min(420px, 100vw);
   max-inline-size: 100vw;

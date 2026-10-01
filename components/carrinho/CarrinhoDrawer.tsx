@@ -23,7 +23,14 @@ export default function CarrinhoDrawer() {
     if (!dialog) return;
 
     if (aberto && !dialog.open) {
-      dialog.showModal();
+      try {
+        dialog.showModal();
+      } catch (erro) {
+        // Sem o modo modal não há prisão de foco nem travamento da rolagem de
+        // fundo, então o motivo precisa aparecer em vez de falhar calado.
+        console.error("[carrinho] showModal falhou, abrindo sem modal:", erro);
+        dialog.show();
+      }
     } else if (!aberto && dialog.open) {
       dialog.close();
     }
