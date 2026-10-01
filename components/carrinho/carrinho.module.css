@@ -392,13 +392,19 @@
 
 /* ---- Painel lateral do carrinho (EDI-116) ---- */
 
+/*
+ * `display` fica só no estado aberto, de propósito. A folha do navegador
+ * esconde o diálogo fechado com `dialog:not([open]) { display: none }`, mas
+ * regra de autor vence regra do navegador na cascata, qualquer que seja a
+ * especificidade — um `display: flex` solto aqui deixaria o painel visível no
+ * fluxo da página o tempo todo, depois do rodapé.
+ */
 .drawer {
   padding: 0;
   border: 0;
   border-inline-start: 1px solid var(--contorno);
   background: var(--superficie);
   color: var(--tinta);
-  display: flex;
   flex-direction: column;
 }
 
@@ -410,6 +416,7 @@
  */
 .drawer[open],
 .drawer:modal {
+  display: flex;
   position: fixed;
   inset: 0 0 0 auto;
   z-index: 90;

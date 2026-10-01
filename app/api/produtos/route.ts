@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { criarProduto, listarProdutos, slugDisponivel } from "@/lib/produtos/repository";
+import { normalizarTextosProduto } from "@/lib/produtos/normalizacao";
 import { gerarSlug } from "@/lib/produtos/slug";
 import { validarProduto, type ProdutoPayload } from "@/lib/produtos/validation";
 import type {
@@ -22,7 +23,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const payload = (await request.json()) as ProdutoPayload;
+  const payload = normalizarTextosProduto((await request.json()) as ProdutoPayload);
   const erros = validarProduto(payload);
 
   if (Object.keys(erros).length > 0) {

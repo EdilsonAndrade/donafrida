@@ -6,6 +6,7 @@ import {
   removerProduto,
   slugDisponivel,
 } from "@/lib/produtos/repository";
+import { normalizarTextosProduto } from "@/lib/produtos/normalizacao";
 import { gerarSlug } from "@/lib/produtos/slug";
 import { removerFotoProduto } from "@/lib/storage/blob";
 import { validarProduto, type ProdutoPayload } from "@/lib/produtos/validation";
@@ -33,7 +34,7 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ erro: "Produto não encontrado." }, { status: 404 });
   }
 
-  const payload = (await request.json()) as ProdutoPayload;
+  const payload = normalizarTextosProduto((await request.json()) as ProdutoPayload);
   const erros = validarProduto(payload, { parcial: true });
 
   if (Object.keys(erros).length > 0) {
