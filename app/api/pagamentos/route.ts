@@ -63,6 +63,9 @@ export async function POST(request: Request) {
   // O valor cobrado é sempre o do pedido lido do banco — nunca o que vier do cliente (FR-004).
   // A API de Orders espera valores como string decimal com 2 casas.
   const valor = centavosParaReais(pedido.valorTotal).toFixed(2);
+  // O Brick não envia o nome do pagador no cartão; usa o do pedido (também é o
+  // que o Mercado Pago lê em teste: nome "APRO" aprova, "OTHE" recusa).
+  const [primeiroNome, ...sobrenomes] = pedido.cliente.nome.trim().split(/\s+/);
   const requisicao: OrderRequisicao = {
     type: "online",
     processing_mode: "automatic",
@@ -70,8 +73,8 @@ export async function POST(request: Request) {
     total_amount: valor,
     payer: {
       email: formData.payer?.email,
-      first_name: formData.payer?.first_name,
-      last_name: formData.payer?.last_name,
+      first_name: formData.payer?.first_name || primeiroNome,
+      last_name: formData.payer?.last_name || sobrenomes.join(" ") || undefined,
       identification: formData.payer?.identification,
     },
     transactions: {
@@ -120,6 +123,8 @@ export async function POST(request: Request) {
         referenciaExterna: String(order.id),
         metodo,
         status: statusMapeado,
+        // Motivo do Mercado Pago (ex.: "accredited", "rejected_by_issuer") — exposto para diagnóstico na aba Network.
+        motivo: pagamento?.status_detail ?? order.status_detail ?? null,
         detalhes: {
           qrCode: pagamento?.payment_method?.qr_code ?? null,
           qrCodeBase64: pagamento?.payment_method?.qr_code_base64 ?? null,
