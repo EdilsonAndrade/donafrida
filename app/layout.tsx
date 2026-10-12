@@ -4,6 +4,7 @@ import SiteFooter from "@/components/site/SiteFooter";
 import CarrinhoProvider from "@/components/carrinho/CarrinhoProvider";
 import CarrinhoDrawer from "@/components/carrinho/CarrinhoDrawer";
 import { auth } from "@/lib/auth/clienteConfig";
+import { manrope } from "./fontes";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,15 +20,7 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="pt-BR">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@400;500;600&display=swap"
-        />
-      </head>
+    <html lang="pt-BR" className={manrope.variable}>
       <body>
         <CarrinhoProvider autenticado={Boolean(session?.user)}>
           <SiteHeader />

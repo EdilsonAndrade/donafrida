@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/lib/auth/clienteConfig";
 import { auth as authAdmin } from "@/lib/auth/config";
@@ -69,9 +70,11 @@ export default async function SiteHeader() {
     <header className={styles.header}>
       <HeaderScroll />
       <div className={`container ${styles.bar}`}>
-        <Link href="/" className={styles.brand}>
-          {/* Marca provisória em texto — o logotipo desenhado entra sem mudar o layout. */}
-          <span className={styles.logo}>Dona Frida</span>
+        <Link href="/" className={styles.brand} aria-label="Dona Frida — página inicial">
+          {/* Selo redondo da marca; o recorte circular apara a borda irregular do PNG. */}
+          <span className={styles.selo}>
+            <Image src="/logo.png" alt="" width={112} height={112} sizes="56px" priority />
+          </span>
         </Link>
 
         <MenuCategorias naBarra={naBarra} noMais={noMais} />

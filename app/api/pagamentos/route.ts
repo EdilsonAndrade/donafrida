@@ -4,21 +4,44 @@ import {
   existeTentativaAtivaRecente,
   registrarTentativa,
 } from "@/lib/pagamentos/repository";
-import { criarPagamento, type PagamentoRequisicao } from "@/lib/pagamentos/mercadopago";
+import {
+  criarOrder,
+  mensagemErroMercadoPago,
+  pagamentoDaOrder,
+  type OrderRequisicao,
+} from "@/lib/pagamentos/mercadopago";
 import { mapearStatusMercadoPago } from "@/lib/pagamentos/status";
 import { centavosParaReais } from "@/lib/pagamentos/conversao";
 
+/** Subconjunto do `formData` que o Payment Brick envia no `onSubmit`. */
+interface FormDataBrick {
+  token?: string;
+  payment_method_id?: string;
+  installments?: number;
+  payer?: {
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    identification?: { type?: string; number?: string };
+  };
+}
+
 interface PagamentosRequestBody {
   pedidoId?: string;
-  formData?: Record<string, unknown>;
+  /** `selectedPaymentMethod` do Brick: "credit_card", "bank_transfer" (Pix)... */
+  tipoMetodo?: string;
+  formData?: FormDataBrick;
 }
 
 export async function POST(request: Request) {
   const body = (await request.json()) as PagamentosRequestBody;
-  const { pedidoId, formData } = body;
+  const { pedidoId, tipoMetodo, formData } = body;
 
-  if (!pedidoId || !formData) {
-    return NextResponse.json({ erro: "pedidoId e formData são obrigatórios." }, { status: 400 });
+  if (!pedidoId || !tipoMetodo || !formData?.payment_method_id) {
+    return NextResponse.json(
+      { erro: "pedidoId, tipoMetodo e formData são obrigatórios." },
+      { status: 400 }
+    );
   }
 
   const pedido = await buscarPedidoPorId(pedidoId);
@@ -38,25 +61,53 @@ export async function POST(request: Request) {
   }
 
   // O valor cobrado é sempre o do pedido lido do banco — nunca o que vier do cliente (FR-004).
-  const requisicao = {
-    ...formData,
-    transaction_amount: centavosParaReais(pedido.valorTotal),
+  // A API de Orders espera valores como string decimal com 2 casas.
+  const valor = centavosParaReais(pedido.valorTotal).toFixed(2);
+  const requisicao: OrderRequisicao = {
+    type: "online",
+    processing_mode: "automatic",
     external_reference: pedidoId,
-  } as PagamentoRequisicao;
+    total_amount: valor,
+    payer: {
+      email: formData.payer?.email,
+      first_name: formData.payer?.first_name,
+      last_name: formData.payer?.last_name,
+      identification: formData.payer?.identification,
+    },
+    transactions: {
+      payments: [
+        {
+          amount: valor,
+          payment_method: {
+            id: formData.payment_method_id,
+            type: tipoMetodo,
+            token: formData.token,
+            installments: formData.installments,
+          },
+        },
+      ],
+    },
+  };
 
-  let resposta;
+  let order;
   try {
-    resposta = await criarPagamento(requisicao);
-  } catch {
-    return NextResponse.json({ erro: "Falha ao processar o pagamento." }, { status: 502 });
+    order = await criarOrder(requisicao);
+  } catch (erro) {
+    console.error("Falha ao criar order no Mercado Pago:", erro);
+    return NextResponse.json(
+      { erro: "Falha ao processar o pagamento.", detalhe: mensagemErroMercadoPago(erro) },
+      { status: 502 }
+    );
   }
 
-  const statusMapeado = mapearStatusMercadoPago(resposta.status ?? "pending");
+  const pagamento = pagamentoDaOrder(order);
+  const statusMapeado = mapearStatusMercadoPago(order.status ?? "created");
+  const metodo = pagamento?.payment_method?.id ?? formData.payment_method_id;
   const agora = new Date();
 
   await registrarTentativa(pedidoId, {
-    referenciaExterna: String(resposta.id),
-    metodo: resposta.payment_method_id ?? "desconhecido",
+    referenciaExterna: String(order.id),
+    metodo,
     status: statusMapeado,
     valor: pedido.valorTotal,
     criadoEm: agora,
@@ -66,12 +117,12 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       tentativa: {
-        referenciaExterna: String(resposta.id),
-        metodo: resposta.payment_method_id,
+        referenciaExterna: String(order.id),
+        metodo,
         status: statusMapeado,
         detalhes: {
-          qrCode: resposta.point_of_interaction?.transaction_data?.qr_code ?? null,
-          qrCodeBase64: resposta.point_of_interaction?.transaction_data?.qr_code_base64 ?? null,
+          qrCode: pagamento?.payment_method?.qr_code ?? null,
+          qrCodeBase64: pagamento?.payment_method?.qr_code_base64 ?? null,
         },
       },
       pedido: { id: pedidoId, status: statusMapeado === "aprovado" ? "pago" : pedido.status },

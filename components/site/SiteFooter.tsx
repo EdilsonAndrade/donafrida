@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { whatsappLoja } from "@/lib/site/contato";
 import styles from "./SiteFooter.module.css";
@@ -18,6 +19,13 @@ export default function SiteFooter() {
   return (
     <footer className={styles.rodape}>
       <div className={`container ${styles.grade}`}>
+        <div className={styles.marca}>
+          <Link href="/" className={styles.selo} aria-label="Dona Frida — página inicial">
+            <Image src="/logo.png" alt="" width={240} height={240} sizes="120px" />
+          </Link>
+          <p className={styles.nota}>Perfumes e bijuterias com preço justo.</p>
+        </div>
+
         <section className={styles.coluna}>
           <h2 className={styles.titulo}>Loja</h2>
           <ul className={styles.lista}>

@@ -21,18 +21,10 @@
   color: var(--acao-texto);
 }
 
-:global(body:has([data-hero-topo])) .header .logo {
-  color: var(--acao-texto);
-}
-
 /* Assim que a página sai do topo, o cabeçalho volta a ser sólido. */
 :global(html[data-rolado] body:has([data-hero-topo])) .header {
   background: var(--fundo);
   border-bottom-color: var(--contorno);
-  color: var(--tinta);
-}
-
-:global(html[data-rolado] body:has([data-hero-topo])) .header .logo {
   color: var(--tinta);
 }
 
@@ -44,15 +36,41 @@
 }
 
 .brand {
-  text-decoration: none;
+  display: inline-flex;
   flex-shrink: 0;
+  border-radius: var(--raio-redondo);
 }
 
-.logo {
-  font-family: var(--font-display);
-  font-size: 1.625rem;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
+/*
+ * Selo da marca. O círculo rosa ocupa ~95% do PNG e a borda tem serrilhado:
+ * o recorte em círculo com a imagem ampliada deixa só a parte limpa.
+ */
+.selo {
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--raio-redondo);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgb(43 38 38 / 0.06);
+  transition: transform 200ms ease;
+}
+
+.selo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.07);
+}
+
+.brand:hover .selo {
+  transform: rotate(-6deg);
+}
+
+@media (max-width: 480px) {
+  .selo {
+    width: 46px;
+    height: 46px;
+  }
 }
 
 .actions {

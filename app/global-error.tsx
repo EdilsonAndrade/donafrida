@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import PaginaErro, { estilosPaginaErro as styles } from "@/components/erro/PaginaErro";
+import { manrope } from "./fontes";
 import "./globals.css";
 
 /**
@@ -20,14 +21,9 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={manrope.variable}>
       <head>
         <title>Erro — Dona Frida</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;700;800&family=Caveat:wght@500;700&display=swap"
-        />
       </head>
       <body>
         <PaginaErro

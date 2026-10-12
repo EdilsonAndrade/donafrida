@@ -31,9 +31,9 @@
   --aviso: #8a6d3b;
   --erro: #a8443c;
 
-  /* Tipografia — Bodoni Moda só acima de 24px */
-  --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
-  --font-body: "Jost", -apple-system, "Segoe UI", sans-serif;
+  /* Tipografia — Manrope em tudo; títulos se distinguem por peso e entrelinha */
+  --font-display: var(--font-manrope), -apple-system, "Segoe UI", sans-serif;
+  --font-body: var(--font-manrope), -apple-system, "Segoe UI", sans-serif;
 
   /* Forma */
   --raio: 2px;
@@ -73,8 +73,9 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  /* Traço fino, como o desenho do logotipo */
+  font-weight: 300;
+  letter-spacing: -0.02em;
   text-wrap: balance;
   margin: 0;
 }
@@ -89,7 +90,7 @@ h2 {
   line-height: 1.15;
 }
 
-/* h3 costuma cair abaixo de 24px, onde a Bodoni perde legibilidade */
+/* h3 é título de bloco, não de página: peso de interface */
 h3 {
   font-family: var(--font-body);
   font-weight: 600;

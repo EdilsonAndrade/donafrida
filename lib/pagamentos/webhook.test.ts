@@ -25,6 +25,20 @@ describe("assinaturaWebhookValida", () => {
     ).toBe(true);
   });
 
+  it("aceita id alfanumérico de order assinado em minúsculas", () => {
+    const ts = "1700000000";
+    const xSignature = assinar("ord01jq4s4ky8hwq6na5pxb65b3d3", "req-1", ts);
+
+    expect(
+      assinaturaWebhookValida({
+        xSignature,
+        xRequestId: "req-1",
+        dataId: "ORD01JQ4S4KY8HWQ6NA5PXB65B3D3",
+        secret: SECRET,
+      })
+    ).toBe(true);
+  });
+
   it("rejeita quando o secret usado para assinar é diferente", () => {
     const ts = "1700000000";
     const xSignature = assinar("123456", "req-1", ts, "outro-segredo");

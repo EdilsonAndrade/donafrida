@@ -24,13 +24,19 @@ export default function PagamentoBrick({ pedidoId, valorTotalCentavos }: Pagamen
     initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY!, { locale: "pt-BR" });
   }, []);
 
-  async function handleSubmit({ formData }: { formData: unknown }) {
+  async function handleSubmit({
+    selectedPaymentMethod,
+    formData,
+  }: {
+    selectedPaymentMethod: string;
+    formData: unknown;
+  }) {
     setErroEnvio(null);
 
     const resposta = await fetch("/api/pagamentos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pedidoId, formData }),
+      body: JSON.stringify({ pedidoId, tipoMetodo: selectedPaymentMethod, formData }),
     });
     const dados = await resposta.json();
 

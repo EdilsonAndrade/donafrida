@@ -12,10 +12,14 @@ export interface DadosAssinaturaWebhook {
  * validador oficial do SDK (`WebhookSignatureValidator`). Nunca lança —
  * qualquer falha de validação (assinatura ausente, malformada ou que não
  * bate) resulta em `false`.
+ *
+ * IDs alfanuméricos (ex.: orders "ORD01...") entram no manifesto em
+ * minúsculas, conforme a documentação do Mercado Pago.
  */
 export function assinaturaWebhookValida(dados: DadosAssinaturaWebhook): boolean {
+  const dataId = typeof dados.dataId === "string" ? dados.dataId.toLowerCase() : dados.dataId;
   try {
-    WebhookSignatureValidator.validate(dados);
+    WebhookSignatureValidator.validate({ ...dados, dataId });
     return true;
   } catch (erro) {
     if (erro instanceof InvalidWebhookSignatureError) {

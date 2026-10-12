@@ -1,22 +1,25 @@
 import type { StatusTentativaPagamento } from "@/lib/models/pedido";
 
 /**
- * Mapeia o `status` de um pagamento do Mercado Pago para o status interno
- * de uma tentativa de pagamento. `pending`/`in_process` (Pix aguardando
- * compensação, cartão em análise) são tratados como "pendente"; `cancelled`
- * (preferência/QR expirado sem pagamento) como "expirado".
+ * Mapeia o `status` de uma order da API de Orders do Mercado Pago para o
+ * status interno de uma tentativa de pagamento. `created`/`processing`/
+ * `action_required` (Pix aguardando transferência, cartão em análise) são
+ * tratados como "pendente"; `canceled`/`expired` (QR expirado sem
+ * pagamento) como "expirado".
  */
-export function mapearStatusMercadoPago(statusMercadoPago: string): StatusTentativaPagamento {
-  switch (statusMercadoPago) {
-    case "approved":
+export function mapearStatusMercadoPago(statusOrder: string): StatusTentativaPagamento {
+  switch (statusOrder) {
+    case "processed":
       return "aprovado";
-    case "rejected":
+    case "failed":
       return "recusado";
+    case "canceled":
     case "cancelled":
+    case "expired":
       return "expirado";
-    case "pending":
-    case "in_process":
-    case "authorized":
+    case "created":
+    case "processing":
+    case "action_required":
     default:
       return "pendente";
   }
