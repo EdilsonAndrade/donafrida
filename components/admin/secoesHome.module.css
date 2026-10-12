@@ -95,6 +95,90 @@
   margin: 0;
 }
 
+/* ---------- Cor do texto do banner ---------- */
+
+.cores {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.coresRotulo {
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+}
+
+.coresRotulo strong {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.coresLinha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.coresMais summary {
+  width: fit-content;
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+  cursor: pointer;
+  margin-bottom: 0.45rem;
+}
+
+.coresMais summary:hover {
+  color: var(--tinta);
+}
+
+.cor {
+  position: relative;
+  display: grid;
+  cursor: pointer;
+}
+
+/* Rádio real fica invisível sobre a amostra: teclado e leitor de tela continuam funcionando. */
+.cor input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.corAmostra {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--raio);
+  border: 1px solid var(--contorno);
+  box-shadow: inset 0 0 0 1px rgb(43 38 38 / 0.08);
+  transition: box-shadow 0.12s ease;
+}
+
+.cor:hover .corAmostra {
+  border-color: var(--contorno-forte);
+}
+
+.cor input:checked + .corAmostra,
+.corAmostraAtiva {
+  border-color: var(--tinta);
+  box-shadow: 0 0 0 2px var(--superficie), 0 0 0 3px var(--tinta);
+}
+
+.cor input:focus-visible + .corAmostra {
+  outline: 2px solid var(--tinta);
+  outline-offset: 3px;
+}
+
+/* Cor livre: amostra em arco-íris até ser escolhida. */
+.corLivre .corAmostra {
+  background: conic-gradient(#e46a9b, #f2c94c, #a3b18a, #8ec5e8, #5b3f8c, #e46a9b);
+}
+
 .linhaCheck {
   display: flex;
   align-items: center;

@@ -33,6 +33,7 @@
   overflow: hidden;
   background: var(--contorno);
   isolation: isolate;
+  --veu-rgb: 43 38 38;
 }
 
 .bannerHero {
@@ -62,12 +63,16 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--veu, linear-gradient(0deg, rgb(43 38 38 / 0.62), rgb(43 38 38 / 0) 62%));
+  background: var(--veu, linear-gradient(0deg, rgb(var(--veu-rgb) / 0.62), rgb(var(--veu-rgb) / 0) 62%));
 }
 
-.veuEsquerda { --veu: linear-gradient(90deg, rgb(43 38 38 / 0.62), rgb(43 38 38 / 0) 64%); }
-.veuDireita { --veu: linear-gradient(270deg, rgb(43 38 38 / 0.62), rgb(43 38 38 / 0) 64%); }
-.veuCentro { --veu: radial-gradient(ellipse at center, rgb(43 38 38 / 0.5), rgb(43 38 38 / 0.08) 70%); }
+.veuEsquerda { --veu: linear-gradient(90deg, rgb(var(--veu-rgb) / 0.62), rgb(var(--veu-rgb) / 0) 64%); }
+.veuDireita { --veu: linear-gradient(270deg, rgb(var(--veu-rgb) / 0.62), rgb(var(--veu-rgb) / 0) 64%); }
+.veuCentro { --veu: radial-gradient(ellipse at center, rgb(var(--veu-rgb) / 0.5), rgb(var(--veu-rgb) / 0.08) 70%); }
+
+/* Texto escuro: o véu vira creme e a sombra do título clareia. */
+.veuClaro { --veu-rgb: 250 243 242; }
+.veuClaro .bannerTitulo { text-shadow: 0 2px 18px rgb(255 255 255 / 0.45); }
 
 /* Filete nude na base do banner, separando-o da seção seguinte. */
 .banner::after {
@@ -108,7 +113,7 @@
   font-weight: 600;
   line-height: 0.98;
   letter-spacing: -0.01em;
-  text-shadow: 0 2px 18px rgb(43 38 38 / 0.35);
+  text-shadow: 0 2px 18px rgb(var(--veu-rgb) / 0.35);
 }
 
 .bannerHero .bannerTitulo { font-size: clamp(2.2rem, 5.4vw, 4.4rem); }
@@ -359,7 +364,7 @@
   /* No celular o texto sempre vai para a base, com véu de baixo para cima. */
   .bannerConteudo { align-self: end; }
   .veuEsquerda, .veuDireita, .veuCentro {
-    --veu: linear-gradient(0deg, rgb(43 38 38 / 0.7), rgb(43 38 38 / 0) 70%);
+    --veu: linear-gradient(0deg, rgb(var(--veu-rgb) / 0.7), rgb(var(--veu-rgb) / 0) 70%);
   }
 
   .seta { display: none; }
@@ -372,7 +377,7 @@
 .modoMobile { border-radius: var(--raio); }
 .modoMobile .bannerConteudo { align-self: end; padding: 1.5rem; }
 .modoMobile.veuEsquerda, .modoMobile.veuDireita, .modoMobile.veuCentro {
-  --veu: linear-gradient(0deg, rgb(43 38 38 / 0.7), rgb(43 38 38 / 0) 70%);
+  --veu: linear-gradient(0deg, rgb(var(--veu-rgb) / 0.7), rgb(var(--veu-rgb) / 0) 70%);
 }
 .modoMobile.bannerHero .bannerTitulo { font-size: 2.2rem; }
 .modoMobile.bannerIntermediario .bannerTitulo { font-size: 1.8rem; }

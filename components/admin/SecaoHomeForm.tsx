@@ -6,11 +6,18 @@ import SecaoHomePreview from "@/components/admin/SecaoHomePreview";
 import Toast from "@/components/admin/Toast";
 import type { DadosSecaoHome, ErrosSecaoHome } from "@/lib/home/validation";
 import {
+  COR_TEXTO_BANNER_PADRAO,
+  CORES_EXTRAS_BANNER,
+  CORES_MARCA_BANNER,
   LIMITES_SECAO_HOME,
+  ROTULOS_COR_TEXTO_BANNER,
   ROTULOS_TIPO_SECAO,
   TIPOS_SECAO_HOME,
+  hexCorTextoBanner,
   type AlinhamentoHorizontal,
   type AlinhamentoVertical,
+  type CorPaletaBanner,
+  type CorTextoBanner,
   type TipoSecaoHome,
 } from "@/lib/models/secaoHome";
 import adminStyles from "./admin.module.css";
@@ -43,6 +50,84 @@ function Contador({ valor, maximo }: { valor?: string; maximo: number }) {
 
 function ErroCampo({ mensagem }: { mensagem?: string }) {
   return mensagem ? <span className={adminStyles.fieldError}>{mensagem}</span> : null;
+}
+
+type CampoCor = "corSubtitulo" | "corTitulo" | "corTexto";
+
+function AmostrasCor({
+  campo,
+  cores,
+  valor,
+  aoMudar,
+}: {
+  campo: CampoCor;
+  cores: readonly CorPaletaBanner[];
+  valor: CorTextoBanner;
+  aoMudar: (cor: CorTextoBanner) => void;
+}) {
+  return (
+    <>
+      {cores.map((cor) => (
+        <label key={cor} className={styles.cor} title={ROTULOS_COR_TEXTO_BANNER[cor]}>
+          <input
+            type="radio"
+            name={campo}
+            value={cor}
+            checked={valor === cor}
+            onChange={() => aoMudar(cor)}
+            aria-label={ROTULOS_COR_TEXTO_BANNER[cor]}
+          />
+          <span className={styles.corAmostra} style={{ background: hexCorTextoBanner(cor) }} />
+        </label>
+      ))}
+    </>
+  );
+}
+
+/** Cor de um texto do banner: paleta da marca, cores extras ou uma cor livre. */
+function SeletorCor({
+  campo,
+  rotulo,
+  valor,
+  aoMudar,
+}: {
+  campo: CampoCor;
+  rotulo: string;
+  valor: CorTextoBanner;
+  aoMudar: (cor: CorTextoBanner) => void;
+}) {
+  const livre = valor.startsWith("#");
+  const foraDaMarca = !(CORES_MARCA_BANNER as readonly string[]).includes(valor);
+  const nome = livre ? `Personalizada ${valor.toUpperCase()}` : ROTULOS_COR_TEXTO_BANNER[valor as CorPaletaBanner];
+
+  return (
+    <div className={styles.cores} role="radiogroup" aria-label={rotulo}>
+      <span className={styles.coresRotulo}>
+        Cor: <strong>{nome}</strong>
+      </span>
+      <div className={styles.coresLinha}>
+        <AmostrasCor campo={campo} cores={CORES_MARCA_BANNER} valor={valor} aoMudar={aoMudar} />
+      </div>
+      <details className={styles.coresMais} open={foraDaMarca}>
+        <summary>Mais cores</summary>
+        <div className={styles.coresLinha}>
+          <AmostrasCor campo={campo} cores={CORES_EXTRAS_BANNER} valor={valor} aoMudar={aoMudar} />
+          <label className={`${styles.cor} ${styles.corLivre}`} title="Escolher outra cor">
+            <input
+              type="color"
+              value={hexCorTextoBanner(valor)}
+              onChange={(e) => aoMudar(e.target.value as CorTextoBanner)}
+              aria-label="Escolher outra cor"
+            />
+            <span
+              className={`${styles.corAmostra} ${livre ? styles.corAmostraAtiva : ""}`}
+              style={livre ? { background: valor } : undefined}
+            />
+          </label>
+        </div>
+      </details>
+    </div>
+  );
 }
 
 export default function SecaoHomeForm({ id, inicial, mensagemInicial }: Props) {
@@ -182,7 +267,13 @@ export default function SecaoHomeForm({ id, inicial, mensagemInicial }: Props) {
             </label>
             <input id="subtitulo" value={dados.subtitulo ?? ""} onChange={(e) => alterar("subtitulo", e.target.value)} />
             <p className={styles.dica}>Frase curta acima do título, em letra cursiva.</p>
-            <ErroCampo mensagem={erros.subtitulo} />
+            <SeletorCor
+              campo="corSubtitulo"
+              rotulo="Cor do sobretítulo"
+              valor={dados.corSubtitulo ?? COR_TEXTO_BANNER_PADRAO.corSubtitulo}
+              aoMudar={(cor) => alterar("corSubtitulo", cor)}
+            />
+            <ErroCampo mensagem={erros.subtitulo ?? erros.corSubtitulo} />
           </div>
         )}
 
@@ -196,7 +287,15 @@ export default function SecaoHomeForm({ id, inicial, mensagemInicial }: Props) {
             placeholder={dados.tipo === "carrossel" ? "Ex.: Favoritos dos clientes" : ""}
             onChange={(e) => alterar("titulo", e.target.value)}
           />
-          <ErroCampo mensagem={erros.titulo} />
+          {ehBanner && (
+            <SeletorCor
+              campo="corTitulo"
+              rotulo="Cor do título"
+              valor={dados.corTitulo ?? COR_TEXTO_BANNER_PADRAO.corTitulo}
+              aoMudar={(cor) => alterar("corTitulo", cor)}
+            />
+          )}
+          <ErroCampo mensagem={erros.titulo ?? erros.corTitulo} />
         </div>
 
         {dados.tipo !== "carrossel" && (
@@ -205,7 +304,15 @@ export default function SecaoHomeForm({ id, inicial, mensagemInicial }: Props) {
               Texto <Contador valor={dados.texto} maximo={LIMITES_SECAO_HOME.texto} />
             </label>
             <textarea id="texto" rows={3} value={dados.texto ?? ""} onChange={(e) => alterar("texto", e.target.value)} />
-            <ErroCampo mensagem={erros.texto} />
+            {ehBanner && (
+              <SeletorCor
+                campo="corTexto"
+                rotulo="Cor do texto"
+                valor={dados.corTexto ?? COR_TEXTO_BANNER_PADRAO.corTexto}
+                aoMudar={(cor) => alterar("corTexto", cor)}
+              />
+            )}
+            <ErroCampo mensagem={erros.texto ?? erros.corTexto} />
           </div>
         )}
 

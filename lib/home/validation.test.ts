@@ -44,6 +44,29 @@ describe("validarSecaoHome", () => {
     });
   });
 
+  it("aceita cor do texto da paleta ou hex livre e rejeita o resto", () => {
+    const ok = validarSecaoHome({
+      tipo: "bannerHero",
+      imagemDesktop: IMAGEM,
+      corSubtitulo: "dourado",
+      corTitulo: "#1A2B3C",
+      corTexto: "",
+    });
+    expect(ok.ok).toBe(true);
+    if (ok.ok) {
+      expect(ok.dados.corSubtitulo).toBe("dourado");
+      expect(ok.dados.corTitulo).toBe("#1A2B3C");
+      expect(ok.dados.corTexto).toBeUndefined();
+    }
+
+    const r = validarSecaoHome({ tipo: "bannerHero", imagemDesktop: IMAGEM, corTitulo: "red", corTexto: "#fff" });
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      expect(r.erros.corTitulo).toBeDefined();
+      expect(r.erros.corTexto).toBeDefined();
+    }
+  });
+
   it("exige imagem desktop no banner", () => {
     const r = validarSecaoHome({ tipo: "bannerIntermediario", ativa: true });
     expect(r.ok).toBe(false);
