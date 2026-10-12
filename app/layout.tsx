@@ -9,7 +9,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Dona Frida",
-  description: "Perfumes e bijuterias com preço justo — compre online na Dona Frida.",
+  description: "Perfumes importados selecionados com preço justo — compre online na Dona Frida.",
 };
 
 export default async function RootLayout({

@@ -11,7 +11,7 @@ export default function BuscaHeader() {
         id="busca-header"
         type="search"
         name="q"
-        placeholder="Buscar perfume, bijuteria…"
+        placeholder="Buscar perfume"
         autoComplete="off"
       />
       <button type="submit" aria-label="Buscar">

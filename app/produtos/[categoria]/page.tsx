@@ -22,7 +22,7 @@ export default async function ProdutosPorCategoriaPage({
   return (
     <div className="container">
       <div className={styles.hero}>
-        <p className={styles.eyebrow}>perfumes e bijuterias</p>
+        <p className={styles.eyebrow}>perfumes importados selecionados</p>
         <h1>{categoria}</h1>
       </div>
 

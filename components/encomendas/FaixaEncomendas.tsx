@@ -11,7 +11,7 @@ export default function FaixaEncomendas() {
           Precisa de <span>mais unidades</span>?
         </h2>
         <p className={styles.faixaDescricao}>
-          Encomende perfumes e bijuterias em quantidade. A gente confere a disponibilidade e retorna com
+          Encomende perfumes importados selecionados em quantidade. A gente confere a disponibilidade e retorna com
           valores e prazo.
         </p>
         <Link href="/encomendas" className={styles.faixaBotao}>

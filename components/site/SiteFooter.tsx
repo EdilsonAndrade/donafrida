@@ -23,7 +23,7 @@ export default function SiteFooter() {
           <Link href="/" className={styles.selo} aria-label="Dona Frida — página inicial">
             <Image src="/logo.png" alt="" width={240} height={240} sizes="120px" />
           </Link>
-          <p className={styles.nota}>Perfumes e bijuterias com preço justo.</p>
+          <p className={styles.nota}>Perfumes importados selecionados com preço justo.</p>
         </div>
 
         <section className={styles.coluna}>
@@ -106,7 +106,7 @@ export default function SiteFooter() {
       </div>
 
       <div className={`container ${styles.base}`}>
-        <p>© {ano} Dona Frida. Perfumes e bijuterias.</p>
+        <p>© {ano} Dona Frida. Perfumes importados selecionados.</p>
         <Link href="/termos">Termos e políticas</Link>
       </div>
     </footer>

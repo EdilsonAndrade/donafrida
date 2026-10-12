@@ -18,7 +18,7 @@ export default async function ProdutosPage({
   return (
     <div className="container">
       <div className={styles.hero}>
-        <p className={styles.eyebrow}>perfumes e bijuterias</p>
+        <p className={styles.eyebrow}>perfumes importados selecionados</p>
         <h1>Fragrâncias e brilhos para todo dia</h1>
       </div>
 

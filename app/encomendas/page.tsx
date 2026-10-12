@@ -6,7 +6,7 @@ import styles from "@/components/encomendas/encomendas.module.css";
 export const metadata = {
   title: "Encomendas em quantidade — Dona Frida",
   description:
-    "Precisa de mais unidades de um perfume ou bijuteria, para revenda ou brindes? Faça seu pedido de encomenda na Dona Frida.",
+    "Precisa de mais unidades de um perfume importado, para revenda ou brindes? Faça seu pedido de encomenda na Dona Frida.",
 };
 
 export default async function EncomendasPage({
