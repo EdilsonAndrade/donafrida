@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { initMercadoPago, Payment } from "@mercadopago/sdk-react";
 import StatusPagamento, { type ResultadoTentativa } from "./StatusPagamento";
 import styles from "./pagamento.module.css";
+
+/** Intervalo entre consultas do status enquanto o Pix aguarda pagamento. */
+const INTERVALO_CONSULTA_MS = 5000;
 
 // Precisa rodar antes do <Payment> montar: o efeito do Brick (filho) roda antes
 // de qualquer useEffect deste componente (pai), e sem a Public Key o SDK
@@ -23,6 +26,29 @@ export default function PagamentoBrick({ pedidoId, valorTotalCentavos }: Pagamen
   const [resultado, setResultado] = useState<ResultadoTentativa | null>(null);
   const [erroEnvio, setErroEnvio] = useState<string | null>(null);
   const [chaveBrick, setChaveBrick] = useState(0);
+
+  // Pix não é aprovado na hora como o cartão: consulta o status até sair de
+  // "pendente" e então recarrega a página com a confirmação.
+  const aguardandoPagamento = resultado?.status === "pendente";
+  useEffect(() => {
+    if (!aguardandoPagamento) return;
+
+    const intervalo = setInterval(async () => {
+      const resposta = await fetch(`/api/pagamentos/status?pedidoId=${pedidoId}`, { cache: "no-store" });
+      if (!resposta.ok) return; // erro fica visível na aba Network; tenta de novo no próximo ciclo
+      const dados = await resposta.json();
+      const status = dados.tentativa?.status;
+
+      if (dados.pedido?.status === "pago" || status === "aprovado") {
+        setResultado((atual) => (atual ? { ...atual, status: "aprovado" } : atual));
+        router.refresh();
+      } else if (status === "recusado" || status === "expirado") {
+        setResultado((atual) => (atual ? { ...atual, status } : atual));
+      }
+    }, INTERVALO_CONSULTA_MS);
+
+    return () => clearInterval(intervalo);
+  }, [aguardandoPagamento, pedidoId, router]);
 
   async function handleSubmit({
     selectedPaymentMethod,
