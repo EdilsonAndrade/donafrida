@@ -278,6 +278,19 @@ export default function PedidosLista({
                     <div>
                       <p>
                         <strong>{detalhe.cliente.nome}</strong> · {detalhe.cliente.email}
+                        {detalhe.cliente.telefone && <> · {detalhe.cliente.telefone}</>}
+                      </p>
+                      {detalhe.cliente.endereco?.logradouro && (
+                        <p>
+                          Entrega: {detalhe.cliente.endereco.logradouro}, {detalhe.cliente.endereco.numero}
+                          {detalhe.cliente.endereco.complemento && ` - ${detalhe.cliente.endereco.complemento}`}
+                          {" — "}
+                          {detalhe.cliente.endereco.bairro}, {detalhe.cliente.endereco.cidade}/
+                          {detalhe.cliente.endereco.estado} — CEP {detalhe.cliente.endereco.cep}
+                        </p>
+                      )}
+                      <p>
+                        Pedido nº {detalhe.id} · total {formatarPreco(detalhe.valorTotal)}
                       </p>
                       <ul>
                         {detalhe.itens.map((item, indice) => (
@@ -290,6 +303,8 @@ export default function PedidosLista({
                       {detalhe.pagamento.metodo && (
                         <p>
                           Pagamento: {detalhe.pagamento.metodo} — {detalhe.pagamento.status}
+                          {detalhe.pagamento.referenciaExterna &&
+                            ` (Mercado Pago: ${detalhe.pagamento.referenciaExterna})`}
                         </p>
                       )}
                       {detalhe.rastreio && (
