@@ -67,6 +67,14 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* Rodapé sempre no fim da tela, mesmo em páginas com pouco conteúdo */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.conteudo-site {
+  flex: 1 0 auto;
 }
 
 h1,

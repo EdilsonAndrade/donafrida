@@ -24,7 +24,7 @@ export default async function RootLayout({
       <body>
         <CarrinhoProvider autenticado={Boolean(session?.user)}>
           <SiteHeader />
-          {children}
+          <div className="conteudo-site">{children}</div>
           <SiteFooter />
           <CarrinhoDrawer />
         </CarrinhoProvider>
