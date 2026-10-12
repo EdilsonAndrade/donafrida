@@ -193,7 +193,7 @@ export default function CategoriaMercadoLivreSelect({ categoriaId, caminho, onCh
           <input
             type="search"
             className={styles.catBusca}
-            placeholder="Buscar categoria (ex: perfume, colar, brinco)"
+            placeholder="Buscar categoria (ex: perfume, body splash)"
             value={termo}
             onChange={(e) => aoDigitar(e.target.value)}
             autoFocus

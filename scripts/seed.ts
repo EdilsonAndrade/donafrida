@@ -1,5 +1,5 @@
 /**
- * Popula o catálogo com perfumes e bijuterias de demonstração para
+ * Popula o catálogo com perfumes de demonstração para
  * visualização do site. Não sobe nenhum servidor — só insere documentos
  * direto no MongoDB Atlas já configurado em .env.local. Rode com `npm run seed`.
  */
@@ -10,19 +10,13 @@ import getMongoClient, { DB_NAME } from "../lib/db/mongodb";
 import { PRODUTOS_COLLECTION, type Produto } from "../lib/models/produto";
 import { gerarSlug } from "../lib/produtos/slug";
 
-/** Foto provisória em SVG (frasco ou joia) na paleta da marca — sem depender de arquivo externo. */
-function fotoMock(cor: string, forma: "frasco" | "anel" | "colar"): string {
+/** Foto provisória em SVG (frasco) na paleta da marca — sem depender de arquivo externo. */
+function fotoMock(cor: string, forma: "frasco"): string {
   const formas: Record<typeof forma, string> = {
     frasco:
       `<rect x="85" y="30" width="30" height="22" rx="4" fill="#6f6667"/>` +
       `<rect x="55" y="52" width="90" height="118" rx="22" fill="${cor}"/>` +
       `<rect x="70" y="95" width="60" height="34" rx="6" fill="#ffffffaa"/>`,
-    anel:
-      `<circle cx="100" cy="112" r="52" fill="none" stroke="${cor}" stroke-width="16"/>` +
-      `<path d="M100 38 L116 60 L100 76 L84 60 Z" fill="#ffffff" stroke="${cor}" stroke-width="4"/>`,
-    colar:
-      `<path d="M40 40 C45 120 155 120 160 40" fill="none" stroke="${cor}" stroke-width="6"/>` +
-      `<circle cx="100" cy="128" r="18" fill="${cor}"/>`,
   };
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#F7E9EA"/>${formas[forma]}</svg>`;
@@ -69,34 +63,6 @@ const PRODUTOS_MOCK: Array<Omit<Produto, "_id" | "slug" | "criadoEm" | "atualiza
     estoque: 0,
     categoria: "body-splash",
     fichaTecnica: { volumeMl: 200, genero: "feminino", familiaOlfativa: "Frutado" },
-  },
-  {
-    nome: "Colar Ponto de Luz Banhado a Ouro",
-    descricao: "Corrente delicada com pingente de zircônia. Acompanha saquinho para presente.",
-    preco: 4990,
-    fotos: [fotoMock("#C9A96E", "colar")],
-    estoque: 15,
-    categoria: "bijuterias",
-    custoProduto: {
-      custoCompraCentavos: 1800,
-      custoEmbalagemCentavos: 150,
-      itensAdicionais: [{ nome: "Sacola de presente", valorCentavos: 250 }],
-    },
-    fichaTecnica: {
-      material: "Latão com zircônia",
-      banho: "ouro",
-      tamanho: "45 cm",
-      itensInclusos: ["1 colar", "1 saquinho de presente"],
-    },
-  },
-  {
-    nome: "Anel Solitário Prata Ródio",
-    descricao: "Anel clássico com pedra central, acabamento em ródio que não escurece.",
-    preco: 3990,
-    fotos: [fotoMock("#A9A4A6", "anel")],
-    estoque: 20,
-    categoria: "bijuterias",
-    fichaTecnica: { material: "Aço inoxidável", banho: "rodio", tamanho: "Aro 16" },
   },
 ];
 

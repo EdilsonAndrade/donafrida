@@ -36,12 +36,10 @@ import {
 import { resolverTaxasCanais, type CanalVenda } from "@/lib/produtos/canais";
 import { TAXAS_CANAIS_PADRAO, type TaxasCanaisConfig } from "@/lib/models/configuracao";
 import {
-  BANHOS_BIJUTERIA,
   GENEROS_PRODUTO,
   LIMITE_DESCRICAO_META,
   LIMITE_TITULO_META,
   MAX_ITENS_ADICIONAIS_CUSTO,
-  ROTULOS_BANHO,
   ROTULOS_GENERO,
   type CustoProduto,
   type TaxasCanaisProduto,
@@ -1140,43 +1138,6 @@ export default function ProdutoForm({
               placeholder="Ex: Good Girl"
               value={valores.fichaTecnica.inspiradoEm}
               onChange={(e) => atualizarCampoFichaTecnica("inspiradoEm", e.target.value)}
-            />
-          </div>
-        </div>
-
-        <strong className={styles.mlLinkAviso}>Bijuteria</strong>
-        <div className={styles.row}>
-          <div className={styles.field}>
-            <label htmlFor="fichaTecnicaMaterial">Material</label>
-            <input
-              id="fichaTecnicaMaterial"
-              placeholder="Ex: Aço inoxidável"
-              value={valores.fichaTecnica.material}
-              onChange={(e) => atualizarCampoFichaTecnica("material", e.target.value)}
-            />
-          </div>
-          <div className={styles.field}>
-            <label htmlFor="fichaTecnicaBanho">Banho</label>
-            <select
-              id="fichaTecnicaBanho"
-              value={valores.fichaTecnica.banho}
-              onChange={(e) => atualizarCampoFichaTecnica("banho", e.target.value)}
-            >
-              <option value="">Não informado</option>
-              {BANHOS_BIJUTERIA.map((banho) => (
-                <option key={banho} value={banho}>
-                  {ROTULOS_BANHO[banho]}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.field}>
-            <label htmlFor="fichaTecnicaTamanho">Tamanho</label>
-            <input
-              id="fichaTecnicaTamanho"
-              placeholder="Ex: Aro 16, 45 cm"
-              value={valores.fichaTecnica.tamanho}
-              onChange={(e) => atualizarCampoFichaTecnica("tamanho", e.target.value)}
             />
           </div>
         </div>

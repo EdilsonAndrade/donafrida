@@ -1,12 +1,12 @@
 # Dona Frida
 
-Loja online de perfumes e bijuterias: Next.js (App Router) + MongoDB Atlas, hospedada na Vercel. Vende no site (Mercado Pago), no Mercado Livre, na Shopee e no catálogo do Facebook/Instagram.
+Loja online de perfumes importados selecionados: Next.js (App Router) + MongoDB Atlas, hospedada na Vercel. Vende no site (Mercado Pago), no Mercado Livre, na Shopee e no catálogo do Facebook/Instagram.
 
 ## Setup local
 
 1. `npm install`
 2. Copie `.env.example` para `.env.local` e preencha as chaves das contas da Dona Frida (cada uma tem a explicação de onde obter).
-3. `npm run seed:admin` para criar o usuário do painel. Opcional: `npm run seed` para carregar perfumes e bijuterias de exemplo.
+3. `npm run seed:admin` para criar o usuário do painel. Opcional: `npm run seed` para carregar perfumes de exemplo.
 4. `npm run dev` e acesse `http://localhost:3000`. O painel fica em `/admin`.
 
 ## Estrutura

@@ -41,7 +41,7 @@ at specs/002-identidade-visual-loja/plan.md
 
 1. SEMPRE que for criar ou alterar design/UI/páginas do site, invoque as skills abaixo (via Skill tool) antes de implementar:
    - `frontend-design` — direção visual (paleta, tipografia, layout), para qualquer tela nova ou redesenho
-   - `product-page-design` — páginas de produto (galeria, variantes, prova social, CTA), para telas de PDP/vitrine de perfumes e bijuterias
+   - `product-page-design` — páginas de produto (galeria, variantes, prova social, CTA), para telas de PDP/vitrine de perfumes
    - `site-architecture` — estrutura de páginas, navegação e hierarquia, ao planejar novas seções/rotas do site
 2. Essas skills estão em `~/.agents/skills` (nível de usuário, não no repo). Se não aparecerem na listagem de skills disponíveis, avisar o usuário em vez de improvisar o design.
 
