@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { initMercadoPago, Payment } from "@mercadopago/sdk-react";
 import StatusPagamento, { type ResultadoTentativa } from "./StatusPagamento";
 import styles from "./pagamento.module.css";
+
+// Precisa rodar antes do <Payment> montar: o efeito do Brick (filho) roda antes
+// de qualquer useEffect deste componente (pai), e sem a Public Key o SDK
+// desiste de renderizar com apenas um console.error.
+if (typeof window !== "undefined") {
+  initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY!, { locale: "pt-BR" });
+}
 
 interface PagamentoBrickProps {
   pedidoId: string;
@@ -13,16 +20,9 @@ interface PagamentoBrickProps {
 
 export default function PagamentoBrick({ pedidoId, valorTotalCentavos }: PagamentoBrickProps) {
   const router = useRouter();
-  const inicializado = useRef(false);
   const [resultado, setResultado] = useState<ResultadoTentativa | null>(null);
   const [erroEnvio, setErroEnvio] = useState<string | null>(null);
   const [chaveBrick, setChaveBrick] = useState(0);
-
-  useEffect(() => {
-    if (inicializado.current) return;
-    inicializado.current = true;
-    initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY!, { locale: "pt-BR" });
-  }, []);
 
   async function handleSubmit({
     selectedPaymentMethod,

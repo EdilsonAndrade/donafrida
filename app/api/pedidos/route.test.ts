@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Pedido } from "@/lib/models/pedido";
 import type { Produto } from "@/lib/models/produto";
 
-const { listarPedidos, buscarProdutosPorIds, criarPedido, auth } = vi.hoisted(() => ({
+const { listarPedidos, buscarProdutosPorIds, criarPedido, auth, notificarAdminPedidoCriado } = vi.hoisted(() => ({
+  notificarAdminPedidoCriado: vi.fn(),
   listarPedidos: vi.fn(),
   buscarProdutosPorIds: vi.fn(),
   criarPedido: vi.fn(),
@@ -20,6 +21,8 @@ vi.mock("@/lib/pedidos/repository", () => ({
 // Evita importar o pacote `next-auth` de verdade neste teste unitário
 // (Tarefa 10/EDI-84 — `auth()` de clienteConfig.ts é lido opcionalmente no POST).
 vi.mock("@/lib/auth/clienteConfig", () => ({ auth }));
+
+vi.mock("@/lib/email/resend", () => ({ notificarAdminPedidoCriado }));
 
 const { GET, POST } = await import("./route");
 
@@ -133,6 +136,21 @@ describe("POST /api/pedidos", () => {
     expect(criarPedido).toHaveBeenCalledWith(
       expect.objectContaining({ clienteId: undefined })
     );
+  });
+
+  it("avisa a loja por e-mail só na primeira criação do pedido", async () => {
+    criarPedido.mockResolvedValueOnce({ pedido: pedido(), duplicado: false, itensDetalhados: [] });
+    criarPedido.mockResolvedValueOnce({ pedido: pedido(), duplicado: true, itensDetalhados: [{}] });
+    const requisicao = () =>
+      new Request("http://localhost/api/pedidos", {
+        method: "POST",
+        body: JSON.stringify(payloadCheckoutValido()),
+      });
+
+    await POST(requisicao());
+    await POST(requisicao());
+
+    expect(notificarAdminPedidoCriado).toHaveBeenCalledTimes(1);
   });
 
   it("associa o clienteId ao pedido quando há sessão de cliente válida", async () => {

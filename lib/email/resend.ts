@@ -223,6 +223,20 @@ export async function enviarConfirmacaoPedido(pedido: Pedido): Promise<void> {
  * Best-effort: falha de envio é logada e nunca lança.
  */
 export async function notificarAdminVendaSite(pedido: Pedido): Promise<void> {
+  await notificarAdminPedidoSite(pedido, "pago");
+}
+
+/**
+ * Avisa a loja de um pedido recém-criado no checkout do site, ainda pendente
+ * de pagamento. Disparada por POST /api/pedidos só na primeira criação (não
+ * em reenvios idempotentes). Best-effort: falha de envio é logada e nunca lança.
+ */
+export async function notificarAdminPedidoCriado(pedido: Pedido): Promise<void> {
+  await notificarAdminPedidoSite(pedido, "criado");
+}
+
+async function notificarAdminPedidoSite(pedido: Pedido, momento: "criado" | "pago"): Promise<void> {
+  const pago = momento === "pago";
   const numeroPedido = pedido._id?.toString() ?? "";
   const { cliente } = pedido;
   const { endereco } = cliente;
@@ -235,7 +249,7 @@ export async function notificarAdminVendaSite(pedido: Pedido): Promise<void> {
   }));
 
   const valorTotalTexto = formatarValorEmReais(pedido.valorTotal);
-  const formaPagamento = rotuloFormaPagamento(pedido.pagamento.metodo);
+  const formaPagamento = pago ? rotuloFormaPagamento(pedido.pagamento?.metodo) : "Aguardando pagamento";
   const digitosTelefone = cliente.telefone?.replace(/\D/g, "") ?? "";
   const telefone = digitosTelefone ? formatarTelefone(digitosTelefone) : "Não informado";
   // Celular brasileiro com DDD (10–11 dígitos) → conversa direta no WhatsApp.
@@ -246,10 +260,11 @@ export async function notificarAdminVendaSite(pedido: Pedido): Promise<void> {
   const complemento = endereco.complemento ? ` — ${endereco.complemento}` : "";
   const enderecoLinha1 = `${endereco.logradouro}, ${endereco.numero}${complemento}`;
   const enderecoLinha2 = `${endereco.bairro} — ${endereco.cidade}/${endereco.estado} — CEP ${endereco.cep}`;
-  const linkAdmin = `${urlBaseSite()}/admin/pedidos?status=pago`;
+  const linkAdmin = `${urlBaseSite()}/admin/pedidos?status=${pedido.status}`;
+  const titulo = pago ? "Nova venda no site" : "Novo pedido no site — pendente de pagamento";
 
   const text = [
-    `Nova venda no site — pedido #${numeroPedido}`,
+    `${titulo} — pedido #${numeroPedido}`,
     "",
     "Itens:",
     ...itens.map((item) => `${item.quantidade}x ${item.nome} — ${item.subtotal}`),
@@ -266,13 +281,17 @@ export async function notificarAdminVendaSite(pedido: Pedido): Promise<void> {
     enderecoLinha1,
     enderecoLinha2,
     "",
-    `Ver pedidos pagos: ${linkAdmin}`,
+    `Ver no admin: ${linkAdmin}`,
   ].join("\n");
 
   const html = renderEmailLayout({
-    titulo: "Nova venda no site",
+    titulo,
     corpoHtml: `
-      <p>O pagamento do pedido <strong>#${numeroPedido}</strong> foi aprovado.</p>
+      <p>${
+        pago
+          ? `O pagamento do pedido <strong>#${numeroPedido}</strong> foi aprovado.`
+          : `O pedido <strong>#${numeroPedido}</strong> foi criado e aguarda o pagamento do cliente.`
+      }</p>
       <p style="margin:20px 0 8px;font-weight:700;">Itens</p>
       <ul style="margin:0 0 12px;padding-left:20px;">${itens
         .map((item) => `<li>${item.quantidade}x ${escaparHtml(item.nome)} — ${item.subtotal}</li>`)
@@ -289,7 +308,7 @@ export async function notificarAdminVendaSite(pedido: Pedido): Promise<void> {
       }</p>
       <p style="margin:20px 0 8px;font-weight:700;">Entregar em</p>
       <p style="margin:0;padding:14px;background-color:#FFF6ED;border-radius:8px;">${escaparHtml(enderecoLinha1)}<br />${escaparHtml(enderecoLinha2)}</p>
-      <p style="margin:20px 0 0;"><a href="${linkAdmin}">Ver pedidos pagos no admin</a></p>
+      <p style="margin:20px 0 0;"><a href="${linkAdmin}">Ver no admin</a></p>
     `,
   });
 
@@ -298,12 +317,14 @@ export async function notificarAdminVendaSite(pedido: Pedido): Promise<void> {
       from: remetente(),
       to: destinatariosLoja(),
       replyTo: cliente.email,
-      subject: `Nova venda no site — #${numeroPedido} — ${valorTotalTexto}`,
+      subject: pago
+        ? `Pedido pago com sucesso — #${numeroPedido} — ${valorTotalTexto}`
+        : `Pedido criado, pendente de pagamento — #${numeroPedido} — ${valorTotalTexto}`,
       text,
       html,
     });
   } catch (erro) {
-    console.error("Falha ao enviar e-mail de notificação de venda do site:", erro);
+    console.error(`Falha ao enviar e-mail de notificação de pedido ${momento} do site:`, erro);
   }
 }
 

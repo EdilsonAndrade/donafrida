@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/clienteConfig";
+import { notificarAdminPedidoCriado } from "@/lib/email/resend";
 import { CANAIS_ORIGEM, STATUS_PEDIDO, type CanalOrigem, type Pedido, type StatusPedido } from "@/lib/models/pedido";
 import {
   PEDIDOS_POR_PAGINA,
@@ -80,6 +81,10 @@ export async function POST(request: Request) {
       );
     }
     throw erro;
+  }
+
+  if (!duplicado) {
+    await notificarAdminPedidoCriado(pedido);
   }
 
   let detalhes = itensDetalhados;

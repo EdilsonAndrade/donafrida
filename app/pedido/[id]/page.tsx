@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { buscarPedidoPorId, buscarProdutosPorIds } from "@/lib/pedidos/repository";
 import ResumoPedido from "@/components/checkout/ResumoPedido";
 import PagamentoBrick from "@/components/pagamento/PagamentoBrick";
+import LimparCarrinho from "@/components/pagamento/LimparCarrinho";
 import styles from "@/components/checkout/checkout.module.css";
 
 export default async function PedidoConfirmacaoPage({
@@ -47,6 +48,7 @@ export default async function PedidoConfirmacaoPage({
             totalCentavos={pedido.valorTotal}
             titulo="resumo do seu pedido"
           />
+          {pago && <LimparCarrinho />}
           {!pago && (
             <PagamentoBrick pedidoId={id} valorTotalCentavos={pedido.valorTotal} />
           )}

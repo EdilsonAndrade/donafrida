@@ -19,6 +19,7 @@ const {
   notificarAdminVendaExterna,
   enviarConfirmacaoPedido,
   notificarAdminVendaSite,
+  notificarAdminPedidoCriado,
   notificarAdminNovaEncomenda,
   enviarConfirmacaoEncomenda,
 } = await import("./resend");
@@ -258,6 +259,23 @@ describe("notificarAdminVendaSite", () => {
     expect(text).toContain("Rua das Flores, 123 — Apto 4");
     expect(text).toContain("Piracicaba/SP — CEP 13405108");
     expect(text).toContain("https://www.donafrida.com.br/admin/pedidos?status=pago");
+  });
+
+  it("no pedido criado, avisa a loja que está pendente de pagamento", async () => {
+    send.mockResolvedValue({ data: { id: "1" }, error: null });
+
+    await notificarAdminPedidoCriado({ ...pedidoSite, status: "pendente" });
+
+    expect(send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: ["admin@donafrida.com.br", "contato@donafrida.com.br"],
+        subject: expect.stringContaining("Pedido criado, pendente de pagamento"),
+      })
+    );
+    const { text } = send.mock.calls[0][0] as { text: string };
+    expect(text).toContain("Pagamento: Aguardando pagamento");
+    expect(text).toContain("2x Kit Soldados");
+    expect(text).toContain("/admin/pedidos?status=pendente");
   });
 
   it("sem telefone, mostra 'Não informado' e nenhum link de WhatsApp", async () => {
