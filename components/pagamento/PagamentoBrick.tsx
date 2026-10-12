@@ -84,12 +84,10 @@ export default function PagamentoBrick({ pedidoId, valorTotalCentavos }: Pagamen
         key={chaveBrick}
         initialization={{ amount: valorTotalCentavos / 100 }}
         customization={{
+          // Só os meios listados aqui aparecem no Brick: cartão de crédito e Pix.
           paymentMethods: {
             creditCard: "all",
             bankTransfer: "all",
-            types: {
-              excluded: ["debitCard", "ticket", "atm", "prepaidCard", "wallet_purchase", "onboarding_credits"],
-            },
           },
         }}
         onSubmit={handleSubmit}
