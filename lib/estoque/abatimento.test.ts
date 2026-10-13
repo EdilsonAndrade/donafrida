@@ -11,7 +11,14 @@ const { insertOne, createIndex } = vi.hoisted(() => ({
   createIndex: vi.fn().mockResolvedValue(undefined),
 }));
 
+const { marcarPedido } = vi.hoisted(() => ({
+  marcarPedido: vi.fn().mockResolvedValue({ modifiedCount: 1 }),
+}));
+
 vi.mock("@/lib/produtos/repository", () => ({ abaterEstoqueAtomico }));
+vi.mock("@/lib/pedidos/repository", () => ({
+  colecaoPedidos: vi.fn().mockResolvedValue({ updateOne: marcarPedido }),
+}));
 vi.mock("./sincronizacao", () => ({ sincronizarAnuncioProduto }));
 vi.mock("@/lib/db/mongodb", () => ({
   default: vi.fn().mockResolvedValue({
@@ -54,6 +61,24 @@ describe("abaterEstoquePedido", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     sincronizarAnuncioProduto.mockResolvedValue(undefined);
+    marcarPedido.mockResolvedValue({ modifiedCount: 1 });
+  });
+
+  it("marca o pedido antes de baixar e não baixa de novo se ele já foi marcado", async () => {
+    const produtoId = new ObjectId();
+    abaterEstoqueAtomico.mockResolvedValue({ sucesso: true, produto: { _id: produtoId } });
+    const pedido = criarPedido([{ produtoId, quantidade: 2 }]);
+
+    await abaterEstoquePedido(pedido);
+    expect(marcarPedido).toHaveBeenCalledWith(
+      { _id: pedido._id, estoqueAbatidoEm: { $exists: false } },
+      { $set: { estoqueAbatidoEm: expect.any(Date) } }
+    );
+    expect(abaterEstoqueAtomico).toHaveBeenCalledTimes(1);
+
+    marcarPedido.mockResolvedValueOnce({ modifiedCount: 0 });
+    await abaterEstoquePedido(pedido);
+    expect(abaterEstoqueAtomico).toHaveBeenCalledTimes(1);
   });
 
   it("abate com sucesso e dispara a sincronização do produto (pedido do site: sem canalOrigem)", async () => {

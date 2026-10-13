@@ -48,6 +48,7 @@ describe("promoverPedidoSeAprovado (via registrarTentativa/atualizarStatusTentat
 
     await registrarTentativa(pedidoId, criarTentativa());
 
+    expect(findOneAndUpdate.mock.calls[0][0]).toMatchObject({ status: { $in: ["pendente", "cancelado"] } });
     expect(abaterEstoquePedido).toHaveBeenCalledTimes(1);
     expect(abaterEstoquePedido).toHaveBeenCalledWith(pedidoPromovido);
     expect(enviarConfirmacaoPedido).toHaveBeenCalledTimes(1);
@@ -57,7 +58,7 @@ describe("promoverPedidoSeAprovado (via registrarTentativa/atualizarStatusTentat
   });
 
   it("não dispara de novo quando a mesma aprovação é reprocessada (pedido já estava pago)", async () => {
-    // findOneAndUpdate com filtro { status: { $ne: "pago" } } não encontra o documento na segunda vez.
+    // findOneAndUpdate com filtro { status: { $in: ["pendente", "cancelado"] } } não encontra o documento na segunda vez.
     findOneAndUpdate.mockResolvedValueOnce(null);
 
     await atualizarStatusTentativa(pedidoId, "pagamento-1", "aprovado", "pix");

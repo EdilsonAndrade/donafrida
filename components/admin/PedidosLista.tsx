@@ -18,6 +18,10 @@ const LABEL_STATUS: Record<PedidoResumo["status"], string> = {
   cancelado: "Cancelado",
 };
 
+/** Só a aprovação do Mercado Pago baixa o estoque — mudar o status à mão não mexe nele. */
+const AVISO_ESTOQUE_PAGO_MANUAL =
+  "Atenção: marcar como pago por aqui não baixa o estoque. Ajuste a quantidade dos produtos manualmente em Produtos.";
+
 const CLASSE_BADGE_STATUS: Record<PedidoResumo["status"], string> = {
   pendente: styles.badgeStatusPendente,
   pago: styles.badgeStatusPago,
@@ -117,7 +121,11 @@ export default function PedidosLista({
         setPedidos((atual) =>
           atual.map((pedido) => (pedido.id === pedidoId ? { ...pedido, status: novoStatus } : pedido))
         );
-        setToastMensagem(`Pedido marcado como "${LABEL_STATUS[novoStatus]}".`);
+        setToastMensagem(
+          novoStatus === "pago"
+            ? `Pedido marcado como "Pago". Lembre de baixar o estoque em Produtos.`
+            : `Pedido marcado como "${LABEL_STATUS[novoStatus]}".`
+        );
       }
     } finally {
       setSalvandoStatus(false);
@@ -353,7 +361,8 @@ export default function PedidosLista({
         titulo="Mudar status do pedido"
         mensagem={
           pendenteConfirmacao
-            ? `Marcar este pedido como "${LABEL_STATUS[pendenteConfirmacao.novoStatus]}"?`
+            ? `Marcar este pedido como "${LABEL_STATUS[pendenteConfirmacao.novoStatus]}"?` +
+              (pendenteConfirmacao.novoStatus === "pago" ? ` ${AVISO_ESTOQUE_PAGO_MANUAL}` : "")
             : ""
         }
         textoConfirmar={salvandoStatus ? "Salvando..." : "Confirmar"}

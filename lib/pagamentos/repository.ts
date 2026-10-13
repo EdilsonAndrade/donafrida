@@ -23,9 +23,12 @@ export async function existeTentativaAtivaRecente(pedidoId: string): Promise<boo
   );
 }
 
+/** Só um pedido ainda não pago (ou cancelado) é promovido — um pedido já em produção/enviado não volta a "pago". */
+const STATUS_PROMOVIVEIS_A_PAGO = ["pendente", "cancelado"] as const;
+
 /**
  * Promove o pedido para "pago" de forma condicional/idempotente — só tem
- * efeito se o pedido ainda não estiver "pago" (data-model.md #3). Reprocessar
+ * efeito se o pedido ainda estiver pendente ou cancelado (data-model.md #3). Reprocessar
  * a mesma aprovação (resposta síncrona + webhook posterior) não duplica efeito.
  *
  * O abatimento de estoque (Tarefa 5/EDI-78) e o e-mail de confirmação de
@@ -42,7 +45,7 @@ async function promoverPedidoSeAprovado(
 ): Promise<void> {
   const colecao = await colecaoPedidos();
   const pedidoPromovido = await colecao.findOneAndUpdate(
-    { _id: objectId, status: { $ne: "pago" } },
+    { _id: objectId, status: { $in: [...STATUS_PROMOVIVEIS_A_PAGO] } },
     {
       $set: {
         status: "pago",

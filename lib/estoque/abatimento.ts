@@ -7,6 +7,7 @@ import {
   type MotivoInconsistenciaEstoque,
 } from "@/lib/models/estoqueSincronizacao";
 import type { Pedido } from "@/lib/models/pedido";
+import { colecaoPedidos } from "@/lib/pedidos/repository";
 import { abaterEstoqueAtomico } from "@/lib/produtos/repository";
 import { sincronizarAnuncioProduto } from "./sincronizacao";
 
@@ -61,10 +62,21 @@ export async function registrarItemExternoSemProduto(
  * nesse ponto e não pode ser desfeito automaticamente — uma falha de
  * abatimento vira inconsistência para revisão manual (FR-004) sem impedir
  * o abatimento/sincronização dos demais itens do mesmo pedido.
+ *
+ * Idempotente por pedido: grava `estoqueAbatidoEm` antes de baixar, de forma
+ * condicional — uma segunda chamada (admin marca "Pago" depois do Mercado
+ * Pago, ou vice-versa) não baixa de novo.
  */
 export async function abaterEstoquePedido(pedido: Pedido): Promise<void> {
   if (!pedido._id) return;
   const pedidoId = pedido._id;
+
+  const pedidos = await colecaoPedidos();
+  const marcado = await pedidos.updateOne(
+    { _id: pedidoId, estoqueAbatidoEm: { $exists: false } },
+    { $set: { estoqueAbatidoEm: new Date() } }
+  );
+  if (marcado.modifiedCount === 0) return;
 
   for (const item of pedido.itens) {
     const resultado = await abaterEstoqueAtomico(item.produtoId.toString(), item.quantidade);

@@ -104,6 +104,12 @@ export interface Pedido {
    * EDI-105). Puramente informativo: nunca altera `status` (FR-004).
    */
   envioAguardandoLiberacaoAte?: Date;
+  /**
+   * Quando o estoque dos itens foi baixado. Marca de "no máximo uma vez": o
+   * pedido pode virar "pago" por mais de um caminho (Mercado Pago, admin), mas
+   * o estoque só baixa na primeira.
+   */
+  estoqueAbatidoEm?: Date;
   criadoEm: Date;
   atualizadoEm: Date;
 }
